@@ -1,4 +1,4 @@
-CREATE TABLE empl (
+CREATE TABLE emp (
     empno INT PRIMARY KEY,
     ename VARCHAR(50) NOT NULL,
     job VARCHAR(30) NOT NULL,
@@ -10,7 +10,8 @@ CREATE TABLE empl (
 );
 
 
-INSERT INTO empl (empno, ename, job, mgr, hiredate, sal, comm, deptno)
+
+INSERT INTO emp (empno, ename, job, mgr, hiredate, sal, comm, deptno)
 VALUES
 (7839, 'KING', 'PRESIDENT', NULL, '1981-11-17', 4000.00, NULL, 10),
 (7902, 'FORD', 'ANALYST', 7839, '1981-12-03', 3000.00, NULL, 20),
@@ -131,6 +132,7 @@ WHERE job='MANAGER' and deptno=30;
 -- SALARY IF THEY ARE WORKING IN DEPT
 -- 30 AS SALESMAN AND THEIR ANNUAL SALARY HAS TO BE
 -- GREATER THAN 14000
+
 SELECT * , sal*12 AS annual_sal FROM emp
 WHERE deptno=30 and job='SALESMAN' and (sal*12)>14000;
 
@@ -193,8 +195,6 @@ WHERE deptno=10 or deptno=20 or deptno=30 or deptno=40
 SELECT * FROM emp
 
 
-
-
 -- 15.WAQTD DETAILS OF EMPLOYEES WORKING AS MANAGER
 -- OR SALESMAN OR CLERK
 SELECT * FROM emp
@@ -204,7 +204,7 @@ WHERE job='CLERK' or job='SALESMAN' or job='MANAGER'
 -- BEFORE 87
 
 SELECT ename FROM emp
-WHERE hiredate > '1981-01-01' and hiredate<'1987-01-01'
+WHERE hiredate > '1981-01-01' and hiredate < '1987-12-31'
 
 -- 17.WAQTD DETAILS OF EMPLOYEES EARNING MORE THAN
 -- 1250 BUT LESS THAN 3000
@@ -214,7 +214,7 @@ WHERE sal>1250 and sal<3000
 -- 18.WAQTD NAMES OF EMPLOYEES HIRED AFTER 81 INTO DEPT
 -- 10 OR 30
 SELECT ename FROM emp
-WHERE hiredate='1981-01-01' and deptno=10 or deptno=30
+WHERE hiredate >'1981-01-01' and (deptno=10 or deptno=30)
 
 -- 19.WAQTD NAMES OF EMPLOYEES ALONG WITH ANNUAL
 -- SALARY FOR THE EMPLOYEES WORKING AS MANAGER OR
@@ -227,4 +227,108 @@ WHERE job='MANAGER' or job='CLERK' and deptno=10 or deptno=30
 -- THAN 15000
 
 SELECT * , sal*12 as annual_sal FROM emp
-WHERE sal>=1000 and sal<=4000 and sal*12 >=15000
+WHERE (sal BETWEEN 1000 AND 4000 ) AND sal*12 > 15000
+
+
+-- 21.WAQTD employee names with the column alias Employee_Name.
+
+SELECT ename AS employee_name FROM emp;
+
+--22.WAQTD distinct job designations from the employee table.
+
+SELECT DISTINCT job FROM emp;
+
+--23.WAQTD all details of employees whose salary is greater than 2000.
+
+SELECT * FROM emp
+WHERE sal>2000;
+
+--24.WAQTD employee names and salaries whose salary is less than 1500.
+
+SELECT ename , sal
+FROM emp
+WHERE sal<1500;
+
+--25.WAQTD employee names and department numbers for employees in department 30.
+
+SELECT ename, deptno
+FROM emp
+WHERE deptno = 30;
+
+--26.WAQTD all details of employees whose job is not equal to 'CLERK'.
+
+SELECT * FROM emp
+WHERE job != 'CELRK';
+--27.WAQTD employee names and salaries whose salary is greater than or equal to 2500.
+
+SELECT ename, sal 
+FROM emp
+WHERE sal>=2500;
+   
+--28.WAQTD employee details whose salary is less than or equal to 1200.
+
+SELECT * FROM emp
+WHERE sal<=1200;
+
+--29.WAQTD distinct department numbers from the employee table.
+
+SELECT DISTINCT deptno
+FROM emp;
+
+--30.WAQTD employee names and their annual salary (sal * 12) with the column alias Annual_Sal.
+
+SELECT ename, sal, sal* 12 AS annual_sal 
+FROM emp;
+
+ --31.WAQTD details of employees who work as a CLERK AND earn less than 1500.
+
+SELECT * FROM emp
+WHERE job = 'CLERK' AND sal> 1500;
+--32.WAQTD names of employees who work in department 10 OR department 20.
+
+SELECT ename
+FROM emp
+WHERE deptno=10 OR deptno =20;
+
+--33.WAQTD details of employees who do NOT belong to department 30.
+
+SELECT * FROM emp
+WHERE deptno!= 30;
+
+--34.WAQTD employee names and jobs concatenated together (e.g., KING - PRESIDENT) with the alias Emp_Profile.
+
+SELECT CONCAT(ename,'-',job) AS emp_profile
+FROM emp;
+
+
+--35.WAQTD distinct manager IDs from the employee table.
+
+SELECT DISTINCT mgr
+FROM emp;
+
+--36.WAQTD employee details whose salary is greater than 1000 AND less than 3000.
+
+SELECT * FROM emp
+WHERE sal>1000 AND sal<3000;
+
+--37.WAQTD employee names and salaries where the salary is greater than 2000 OR the department is 10.
+
+SELECT ename, sal
+FROM emp
+WHERE sal>2000 OR deptno=10;
+
+--38.WAQTD employee names combined with their department number into a single concatenated column.
+
+SELECT CONCAT(ename,deptno) AS namedpt 
+FROM emp;
+
+--39.WAQTD employee details where the commission column is not null.
+
+SELECT * FROM emp
+WHERE comm != NULL;
+
+--40.WAQTD employee names and hire dates for employees hired after 1981.
+
+SELECT ename,hiredate
+FROM emp
+WHERE hiredate>'1982-12-31';
