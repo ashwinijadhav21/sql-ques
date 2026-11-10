@@ -319,16 +319,507 @@ WHERE sal>2000 OR deptno=10;
 
 --38.WAQTD employee names combined with their department number into a single concatenated column.
 
-SELECT CONCAT(ename,deptno) AS namedpt 
-FROM emp;
+SELECT CONCAT(ename, '-', deptno) as name_dept
+FROM emp
 
 --39.WAQTD employee details where the commission column is not null.
 
 SELECT * FROM emp
-WHERE comm != NULL;
+WHERE comm IS NOT NULL;
 
 --40.WAQTD employee names and hire dates for employees hired after 1981.
 
 SELECT ename,hiredate
 FROM emp
 WHERE hiredate>'1982-12-31';
+
+--41.WAQTD name of the employee working in department no 10 or 20 or30
+
+SELECT ename 
+FROM emp
+WHERE deptno IN (10,20,30);
+
+--42.WAQTD details at the eployee working as a clerk or sellsman.
+
+SELECT * FROM emp
+WHERE job IN ('CLERL','SELLSMAN');
+
+--43.WAQTD details of the employee except the employees who as work as analyst or sellsman.
+
+SELECT * From emp
+WHERE job NOT IN ('ANALYST','SELLSMAN');
+
+
+--44.WAQTD name, salary of the employee if their range of sal is 1000 to 3000
+
+SELECT ename, sal
+FROM emp
+WHERE sal BETWEEN 1000 AND 3000;
+
+--45.
+select ename
+FROM emp
+WHERE ename LIKE '____';
+
+SELECT ename
+FROM emp
+WHERE ename LIKE '%M'
+
+SELECT ename
+FROM emp
+WHERE ename LIKE 'A%'
+
+SELECT ename
+FROM emp
+WHERE ename LIKE '__A__B_C'
+
+-- list all the employees whose commission is null.
+
+SELECT * FROM emp
+WHERE comm IS NULL;
+
+-- list all the employees who don't have a reporting manager.
+SELECT * FROM emp
+WHERE mgr IS NULL;
+
+--list all the salesman in deptno 30
+
+SELECT *  FROM emp
+WHERE job = 'SALESMAN' AND deptno = 30;
+
+--list all the salesman in deptno 30  and having salary greater than 1500.
+
+SELECT * FROM emp
+WHERE job = 'SALESMAN' AND deptno=30 AND sal>1500;
+
+--list all the employees whose name starts with 's'.
+SELECT * FROM emp
+WHERE ENAME LIKE 'S%'
+
+--list all the employees except those who are working in dept no 10 and 20.
+SELECT * FROM emp
+WHERE deptno NOT IN (10,20);
+
+--list the employees wose name does not start with 's'
+
+SELECT * FROM emp
+WHERE ENAME NOT LIKE 'S%'
+
+--9) LIST ALL THE EMPLOYEES WHOSE COMMISSION IS NULL AND WORKING AS CLERK
+
+
+SELECT * FROM emp
+WHERE comm IS NULL AND job = 'CLERK';
+
+--10) LIST ALL THE EMPLOYEES WHO DON’T HAVE A REPORTING MANAGER IN DEPTNO 10 OR 30
+
+
+SELECT * FROM emp
+WHERE job != 'MANAGER' AND deptno IN (10,30)
+
+--11) LIST ALL THE SALESMEN IN DEPT 30 WITH SAL MORE THAN 2450.
+
+
+SELECT * FROM emp
+WHERE job ='SALESMAN' AND deptno = 30 AND sal>2450
+
+--12) LIST ALL THE ANALYST IN DEPT NUMBER 20 AND HAVING SALARY GREATER THAN 2500
+
+
+SELECT * FROM emp
+WHERE job = 'ANALYST' AND deptno = 20 AND sal>2500
+
+--13) LIST ALL THE EMPLOYEES WHOSE NAME STARTS WITH ‘M’ OR ‘J’
+
+
+SELECT * FROM emp
+WHERE ename LIKE 'M%' OR ename LIKE 'J%';
+
+--14) LIST ALL THE EMPLOYEES WITH ANNUAL SALARY EXCEPT THOSE WHO ARE WORKING IN DEPT 30
+
+
+SELECT * , sal*12 AS annual_sal 
+FROM emp
+WHERE deptno NOT IN (30);
+
+--15) LIST THE EMPLOYEES WHOSE NAME DOES NOT END WITH ‘ES’ OR ‘R’
+
+
+SELECT * FROM emp
+WHERE ename NOT LIKE '%ES' OR ename NOT LIKE '%R'
+
+--16) LIST ALL THE EMPLOYEES WHO ARE HAVING REPORTING MANAGERS IN DEPT 10 ALONG WITH 10% HIKE IN SALARY
+
+SELECT *,sal + (sal * 10/100) AS hike
+FROM emp
+WHERE job = 'MANAGER' AND deptno = 10;
+
+--17) DISPLAY ALL THE EMPLOYEE WHO ARE ‘SALESMAN’S HAVING ‘E’ AS THE LAST BUT ONE CHARACTER IN ENAME BUT SALARY HAVING EXACTLY 4 CHARACTER
+
+SELECT * FROM  emp 
+WHERE job = 'SALESMAN' AND ename LIKE '%E' AND len(sal) = 4
+
+--18) DISPLAY ALL THE EMPLOYEE WHO ARE JOINED AFTER YEAR 81
+
+SELECT * FROM emp
+WHERE hiredate > '1982-01-01';
+
+--19) DISPLAY ALL THE EMPLOYEE WHO ARE JOINED IN FEB
+
+SELECT * FROM emp
+WHERE hiredate BETWEEN '1982-02-01' AND '1982-02-28';
+
+
+
+--20) LIST THE EMPLOYEES WHO ARE NOT WORKING AS MANAGERS AND CLERKS IN DEPT 10 AND 20 WITH A SALARY IN THE RANGE OF 1000 TO 3000
+SELECT * FROM emp
+WHERE job NOT IN ('MANAGER', 'CLERK') AND deptno IN (10,20) AND sal BETWEEN 1000 AND 3000;
+
+--21) LIST THE EMPLOYEES WHOSE SALARY NOT IN THE RANGE OF 1000 TO 2000 AND WORKING IN DEPT 10,20 OR 30 EXCEPT
+--ALL SALESMEN
+
+SELECT * FROM emp
+WHERE sal NOT BETWEEN 1000 AND 2000 AND deptno IN (10,20,30) AND job != 'SALESMAN'
+
+
+--23) DISPLAY ALL THE EMPLOYEES WHOSE JOB HAS STRING
+‘MAN’ IN IT.
+
+SELECT * FROM emp
+WHERE job LIKE '%MAN%'
+
+--24)LIST THE EMPLOYEES WHO ARE HIRED AFTER 82 AND BEFORE 87.
+
+SELECT * FROM emp
+WHERE hiredate > '1983-01-01' AND hiredate < '1986-12-31';
+
+--25)WAQTD ALL THE DETAILS OF EMPLOYEES HIRED IN NOVEMBER AND DECEMBER.
+
+select * from emp
+WHERE EXTRACT (month FROM hiredate) IN (11,12)
+
+
+
+--26)LIST ALL THE EMPLOYEE NAMES AND COMISSION FOR THOSE EMPLOYEES WHO EARN COMISSION MORE THAN THEIR SALARY
+SELECT ename, comm,SAL FROM emp
+WHERE comm > sal;
+
+SELECT hiredate FROM EMP;
+
+
+DROP TABLE IF EXISTS product_reviews CASCADE;
+DROP TABLE IF EXISTS ad_campaigns CASCADE;
+DROP TABLE IF EXISTS inventory CASCADE;
+DROP TABLE IF EXISTS orders CASCADE;
+DROP TABLE IF EXISTS customers CASCADE;
+DROP TABLE IF EXISTS employees CASCADE;
+
+-- १. Employees Table
+CREATE TABLE employees (
+    emp_id SERIAL PRIMARY KEY,
+    emp_name VARCHAR(100),
+    monthly_salary NUMERIC(10, 2),
+    sales_score INT,
+    department_id INT,
+    salary NUMERIC(10, 2)
+);
+
+INSERT INTO employees (emp_name, monthly_salary, sales_score, department_id, salary) VALUES
+('Aarav Sharma', 5000.00, 95, 10, 85000.00),
+('Priya Patel', 4500.00, 82, 10, 72000.00),
+('Rohan Kulkarni', 6000.00, 68, 20, 95000.00),
+('Ananya Deshmukh', 5500.00, 91, 20, 90000.00),
+('Vikram Singh', 4000.00, 74, 30, 65000.00);
+
+-- २. Customers Table
+CREATE TABLE customers (
+    customer_id SERIAL PRIMARY KEY,
+    customer_name VARCHAR(100),
+    street VARCHAR(150),
+    city VARCHAR(50),
+    zip_code VARCHAR(20),
+    primary_phone VARCHAR(20),
+    secondary_phone VARCHAR(20)
+);
+
+INSERT INTO customers (customer_name, street, city, zip_code, primary_phone, secondary_phone) VALUES
+('John Doe', '123 Elm St', 'Mumbai', '400001', '9876543210', NULL),
+('Jane Smith', '456 Oak Rd', 'Pune', '411001', NULL, '9123456789'),
+('Sam Wilson', '789 Pine Ave', 'Nagpur', '440001', NULL, NULL);
+
+-- ३. Orders / Transactions Table
+CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    customer_id INT,
+    item_price NUMERIC(10, 2),
+    transaction_date DATE,
+    amount NUMERIC(10, 2)
+);
+
+INSERT INTO orders (customer_id, item_price, transaction_date, amount) VALUES
+(1, 100.00, '2025-07-15', 100.00),
+(2, 250.50, '2025-08-10', 250.50),
+(3, 50.00, '2025-09-05', 50.00);
+
+-- ४. Inventory Table
+CREATE TABLE inventory (
+    product_id SERIAL PRIMARY KEY,
+    product_name VARCHAR(100),
+    sku VARCHAR(50),
+    wh_a_stock INT,
+    wh_b_stock INT,
+    wh_c_stock INT
+);
+
+INSERT INTO inventory (product_name, sku, wh_a_stock, wh_b_stock, wh_c_stock) VALUES
+('Laptop Pro', 'ABC-1234', 40, 55, 30),
+('Wireless Mouse', 'XYZ-9876', 120, 95, 150),
+('Mechanical Keyboard', 'DEF-5678', 10, 25, 45);
+
+-- ५. Ad Campaigns Table
+CREATE TABLE ad_campaigns (
+    campaign_id SERIAL PRIMARY KEY,
+    campaign_name VARCHAR(100),
+    clicks INT,
+    impressions INT
+);
+
+INSERT INTO ad_campaigns (campaign_name, clicks, impressions) VALUES
+('Summer Sale', 150, 5000),
+('Brand Awareness', 0, 0),
+('Retargeting', 45, 1200);
+
+-- ६. Product Reviews Table (Score stored as text)
+CREATE TABLE product_reviews (
+    review_id SERIAL PRIMARY KEY,
+    product_id INT,
+    rating_score TEXT
+);
+
+INSERT INTO product_reviews (product_id, rating_score) VALUES
+(1, '5'),
+(1, '4'),
+(2, '3'),
+(2, '5'),
+(3, '4');
+
+
+
+--Part 1: Operators, Aliases & Conditional Expressions Annual Compensation with Aliases: Calculate the total annual compensation for employees by multiplying their monthly salary by 12 and adding a $1,200 annual bonus, using clean column aliases (AS).
+
+SELECT monthly_salary * 12 +1200 AS annual_compensation FROM employees;
+
+--Operator Precedence in Checkout Pricing: In an e-commerce order table, calculate the final price by applying a 10% discount before adding a flat $15 shipping fee using parentheses.
+
+SELECT (amount*10/100) AS with_discount, (amount*10/100) + 15 AS final_price FROM orders;
+
+--String Concatenation (||): Generate a full mailing address string by combining street, city, and zip_code columns with separator commas and dashes using PostgreSQL's || operator.
+
+SELECT street || ',' || city || ',' || zip_code AS full_address FROM customers;
+
+--Conditional Tiered Categorization using CASE: Categorize employees into performance tiers based on their sales score: Score >= 90 is 'Gold', 75–89 is 'Silver', and anything below is 'Bronze'.
+
+SELECT emp_name, sales_score,
+CASE 
+WHEN sales_score >= 90 THEN 'Gold'
+WHEN sales_score BETWEEN 75 AND 89 THEN 'Silver'
+WHEN sales_score < 75 THEN 'Bronze'
+END AS performance_tier
+FROM employees;
+
+--Fallback Values using COALESCE: Display a customer contact phone number. If their primary phone is NULL, fallback to their secondary phone, or display 'No Phone Available' if both are missing.
+
+SELECT COALESCE(primary_phone, secondary_phone,'No phone available') AS contact_number FROM customers;
+
+--Part 2: Special Operators & Pattern Matching Date Range Filtering with BETWEEN: Retrieve all orders that occurred between July 1, 2025, and September 30, 2025, inclusively.
+
+SELECT * FROM orders
+WHERE EXTRACT (month FROM transaction_date) IN (7,9)
+
+--Preventing Division by Zero with NULLIF: Calculate the click-through rate (clicks / impressions), ensuring you prevent a division-by-zero error by returning NULL when impressions are zero using NULLIF.
+
+
+
+
+
+--Case-Insensitive Pattern Matching with ILIKE: Search for customer names containing the syllable "son" regardless of letter casing using ILIKE.
+
+
+
+
+
+--Finding Maximum Values Across Columns with GREATEST: Given an inventory table with stock counts across three warehouses (wh_a_stock, wh_b_stock, wh_c_stock), find the highest stock count available for each product.
+
+SELECT max(wh_a_stock) AS a_stock, max(wh_b_stock) AS b_stock, max(wh_c_stock) AS c_stock FROM inventory;
+
+
+--Type Coercion Expression (::): Calculate the average rating score from a review table where the score is stored as text, converting it to an integer using PostgreSQL's shorthand type casting (::).
+
+
+
+
+--Part 3: Multi-Row Aggregate Functions & Advanced Grouping Conditional Aggregation using the FILTER Clause: For each department, count the total number of employees and count how many employees earn a salary greater than $80,000 using PostgreSQL's FILTER (WHERE ...) clause.
+
+SELECT count(department_id) FROM employees
+WHERE salary > 80000;
+
+--Multi-column Grouping with Summary Statistics: Calculate total sales revenue and average unit price grouped by customer ID from the orders table.
+
+SELECT sum(amount) AS total_sales, AVG(item_price) AS avg_unit_price FROM orders
+GROUP BY customer_id;
+
+--Row-to-String Aggregation with STRING_AGG: For each department, generate a single comma-separated list of all employee names using STRING_AGG.
+
+
+
+--Aggregating IDs into an Array with ARRAY_AGG: Group orders by customer ID and create an array containing all transaction amounts associated with each customer using ARRAY_AGG.
+
+
+
+--Combining COUNT(DISTINCT) with Grouping: Count the total number of unique customers who placed orders.
+
+SELECT COUNT(DISTINCT customer_id) AS unique_customers FROM orders;
+
+--Display all columns from the employees table.
+
+SELECT * FROM employees;
+
+--Display only emp_name and salary from employees.
+
+SELECT emp_name , salary FROM employees
+
+
+--Find employees whose salary is greater than 75,000.
+
+SELECT * FROM employees
+WHERE salary > 75000;
+
+--Find employees whose department_id is 10.
+
+SELECT * FROM employees
+WHERE department_id = 10;
+
+--Display employees in descending order of salary.
+
+SELECT * FROM employees
+ORDER BY salary DESC;
+
+--Find employees whose sales_score is greater than 80.
+
+SELECT * FROM employees
+WHERE sales_score > 80;
+
+--Display unique department IDs from employees.
+
+SELECT DISTINCT department_id FROM employees;
+
+--Find employees whose salary is between 65,000 and 90,000.
+
+SELECT * FROM employees
+WHERE salary BETWEEN 65000 AND 90000;
+
+--Find customers who live in Pune.
+
+SELECT * FROM customers
+WHERE city = 'Pune';
+
+
+--Find customers whose primary_phone is NULL.
+
+SELECT * FROM customers
+WHERE primary_phone IS NULL;
+
+--Display orders placed after August 1, 2025.
+
+SELECT * FROM orders
+WHERE transaction_date > 2025-08-01;
+
+--Find products whose names contain the word Mouse.
+
+SELECT * FROM inventory
+WHERE product_name LIKE '%Mouse%';
+
+
+--Find inventory products with wh_a_stock less than 50.
+
+SELECT * FROM inventory
+WHERE wh_a_stock < 50;
+
+
+--Display the two most expensive employees based on salary.
+
+SELECT * FROM employees
+ORDER BY salary ASC
+LIMIT 2;
+
+--Find ad campaigns with zero clicks.
+
+SELECT * FROM ad_campaigns
+WHERE clicks = 0 ;
+
+--Count the total number of employees.
+
+SELECT COUNT(*) FROM employees;
+
+
+--Find the average employee salary.
+
+SELECT AVG(salary) FROM employees;
+
+--Find the highest and lowest employee salaries.
+
+SELECT MAX(salary) AS max_Salary , MIN(salary) AS min_salary FROM employees;
+
+--Calculate the total stock of each product across all three warehouses.
+
+SELECT SUM(wh_a_stock) AS a_Stock, SUM(wh_b_stock) AS b_stock, SUM(wh_c_stock) AS c_stock FROM inventory;
+
+--Count the number of employees in each department.
+
+SELECT  COUNT(department_id) FROM employees
+GROUP BY department_id; 
+
+--Calculate the average sales score for each department.
+
+SELECT AVG(sales_score) FROM employees
+GROUP BY department_id;
+
+--Find departments with more than one employee.
+
+SELECT depatment_id, COUNT(department_id) AS employee_count FROM employees
+GROUP BY department_id
+HAVING COUNT(department_id) > 1;
+
+
+--Calculate total revenue using the amount column in orders.
+
+SELECT SUM(amount) AS total_revenue FROM orders;
+
+--Count the number of orders for each customer.
+
+SELECT COUNT(customer_id) AS order_count FROM orders
+GROUP BY customer_id;
+
+--Calculate the average rating for each product from product_reviews. Convert rating_score from text to a numeric value.
+
+
+ALTER TABLE product_reviews
+ALTER COLUMN rating_score TYPE INT
+USING rating_score:: INT;
+
+SELECT AVG(rating_score) , product_id FROM product_reviews
+GROUP BY product_id;
+
+SELECT emp_name, salary, salary * 12 AS annual_salary FROM emp;
+
+--list of the all employees in deptno 30
+
+SELECT * FROM employees
+WHERE deptno = 30;
+
+--list of all eployees who arehired after 82 and before 87
+
+SELECT * FROM employees
+WHERE hiredate >= 1983-01-01 AND hiredate <= 1986-12-31;
+
+--
