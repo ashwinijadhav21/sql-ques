@@ -83,18 +83,18 @@ SELECT min(salary) FROM employee;
 
 --Calculate the average salary of all employees.
 
-SELECT salary, avg(salary) FROM employee;
-
-Find the total salary paid by the company.
 
 
-
-Count the number of employees in each department.
+--Find the total salary paid by the company.
 
 
 
-Find the average salary of each department.
+--Count the number of employees in each department.
 
 
 
-Display departments having more than 5 employees.
+--Find the average salary of each department.
+
+
+
+--Display departments having more than 5 employees.
